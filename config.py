@@ -5,7 +5,7 @@ load_dotenv()
 
 API_ID = int(os.getenv("API_ID"))
 API_HASH = os.getenv("API_HASH")
-BOT = os.getenv("BOT_TOKEN")
+BOT_TOKEN = os.getenv("BOT_TOKEN")
 BOT_USERNAME = os.getenv("BOT_USERNAME")
 FORCE_JOIN = os.getenv("FORCE_JOIN_CHANNEL")
 CREATOR = os.getenv("CREATOR_USERNAME", "@daxkings")
