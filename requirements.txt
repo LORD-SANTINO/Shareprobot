@@ -1,0 +1,3 @@
+pyrogram
+tgcrypto==1.2.5
+python-dotenv
