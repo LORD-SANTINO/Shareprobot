@@ -234,23 +234,27 @@ Made by @daxbots
 async def myref(client, cb):
     link = generate_referral_link(cb.from_user.id)
     user = get_user(cb.from_user.id)
-    await cb.message.reply(f"""
-Your Referral Link:\n{link}\n\nYou have {user['referrals']}/{REFERRALS_NEEDED} referrals")
 
-# Handle password input
+    await cb.message.reply(
+        f"Your Referral Link:\n{link}\n\nYou have {user['referrals']}/{REFERRALS_NEEDED} referrals"
+    )
+
+
 @app.on_message(filters.private & filters.text & ~filters.command)
 async def handle_text(client, message):
     user_id = message.from_user.id
-    if user_id in user_state:
-        state = user_state[user_state]
 
+    if user_id in user_state:
+        state = user_state[user_id]
+
+        # ------------------ SET PASSWORD ------------------
         if state["stage"] in ["set_pass", "set_pass_both", "set_pass_all"]:
             password = message.text
             data = state["data"]
             is_premium = get_user(user_id)['is_premium']
 
             force_join = 1 if "both" in state["stage"] or "all" in state["stage"] else 0
-            one_t = 1 if "all" in state["stage"] else 0
+            one_time = 1 if "all" in state["stage"] else 0
 
             code = create_lock(
                 user_id=user_id,
@@ -258,24 +262,38 @@ async def handle_text(client, message):
                 file_type=data["file_type"],
                 password=password,
                 force_join=force_join,
-                one_time=one_t,
+                one_time=one_time,
                 expiry=None if is_premium else datetime.now() + timedelta(days=2),
                 premium=is_premium
             )
 
             link = generate_share_link(code)
-            await message.reply(f"""Locked with password!\nShare: {link}\n Delete code: {code} Made by @daxbots")
-            del user_state[user_id]
 
-        elif "waiting_pass" in state:
+            await message.reply(
+                f"Locked with password!\nShare: {link}\nDelete code: {code}\nMade by @daxbots"
+            )
+
+            del user_state[user_id]
+            return
+
+        # ------------------ CHECK PASSWORD ------------------
+        if state.get("waiting_pass"):
             code = state["waiting_pass"]
             lock = get_lock_by_code(code)
+
             if lock['password'] == message.text:
-                await client.copy_message(user_id, lock['user_id'], lock['id' if lock['file_type']=='text' else 'message_id'])
+                msg_id = lock["id"] if lock["file_type"] == "text" else lock["message_id"]
+                await client.copy_message(user_id, lock['user_id'], msg_id)
+
                 await message.reply("✅ Unlocked!\nMade by @daxbots")
+
                 if lock['one_time']:
                     delete_lock(code)
             else:
                 await message.reply("❌ Wrong password!")
+
             del user_state[user_id]
-    app.run()
+            return
+
+
+app.run()
