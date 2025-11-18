@@ -265,11 +265,11 @@ async def handle_text(client, message):
 
             link = generate_share_link(code)
             await message.reply(f"""
-Locked with password!
+    Locked with password!
 
 Share: {link}
 
-Delete code: `{code}`
+Delete code: {code}
 
 Made by @daxbots
             """)
