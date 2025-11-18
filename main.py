@@ -107,9 +107,15 @@ async def start(client, message):
 
 @app.on_message(filters.private & ~filters.command(["stats", "delete"]))
 async def receive_content(client, message):
+    user_id = message.from_user.id
+
+    # 🔥 PREVENT BOT FROM TREATING PASSWORD / REPLIES AS NEW CONTENT
+    if user_id in user_state:
+        return
+
     if message.media or message.text:
-        pending_content[message.from_user.id] = message
-        user = get_user(message.from_user.id)
+        pending_content[user_id] = message
+        user = get_user(user_id)
         is_prem = user['is_premium'] if user else False
 
         text = "🔒 How do you want to protect this content?\n\n"
@@ -117,7 +123,6 @@ async def receive_content(client, message):
             text += "⚠️ Free: Only Password or No Lock | Links expire in 2 days\n💎 Get Premium → Refer 10 users!"
 
         await message.reply(text, reply_markup=LOCK_KEYBOARD)
-
 @app.on_callback_query(filters.regex("^type_"))
 async def lock_type(client, cb):
     user_id = cb.from_user.id
