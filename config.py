@@ -8,5 +8,5 @@ API_HASH = os.getenv("API_HASH")
 BOT_TOKEN = os.getenv("BOT_TOKEN")
 BOT_USERNAME = os.getenv("BOT_USERNAME")
 FORCE_JOIN = os.getenv("FORCE_JOIN_CHANNEL")
-CREATOR = os.getenv("CREATOR_USERNAME", "@daxkings")
+CREATOR = os.getenv("CREATOR_USERNAME", "@daxbots")
 REFERRALS_NEEDED = 10
