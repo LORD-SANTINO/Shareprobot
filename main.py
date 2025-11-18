@@ -264,15 +264,7 @@ async def handle_text(client, message):
             )
 
             link = generate_share_link(code)
-            await message.reply(f"""
-    Locked with password!
-
-Share: {link}
-
-Delete code: {code}
-
-Made by @daxbots
-            """)
+            await message.reply(f"""Locked with password!\nShare: {link}\n Delete code: {code} Made by @daxbots")
             del user_state[user_id]
 
         elif "waiting_pass" in state:
@@ -286,5 +278,4 @@ Made by @daxbots
             else:
                 await message.reply("❌ Wrong password!")
             del user_state[user_id]
-
-app.run()
+    app.run()
