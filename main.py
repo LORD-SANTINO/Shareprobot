@@ -240,7 +240,7 @@ async def myref(client, cb):
     )
 
 
-@app.on_message(filters.private & filters.text & ~filters.command())
+@app.on_message(filters.private & filters.text & ~filters.command([""]))
 async def handle_text(client, message):
     user_id = message.from_user.id
 
