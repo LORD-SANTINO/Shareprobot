@@ -195,7 +195,7 @@ async def lock_type(client, cb):
 
     link = generate_share_link(code)
     await cb.message.reply(f"""
-🔒 Content Locked Successfully!
+Content Locked Successfully!
 
 Share this link:
 {link}
@@ -265,7 +265,7 @@ async def handle_text(client, message):
 
             link = generate_share_link(code)
             await message.reply(f"""
-🔐 Locked with password!
+Locked with password!
 
 Share: {link}
 
