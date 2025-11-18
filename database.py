@@ -50,7 +50,7 @@ def make_premium(user_id):
     conn.commit()
 
 def create_lock(**kwargs):
-    code = ''.join(random.choices(string.ascii_letters + string.digits) for _ in range(12))
+    code = ''.join(random.choices(string.ascii_letters + string.digits, k=12))
     c.execute("""INSERT INTO locks 
                  (user_id, file_id, file_type, password, force_join, one_time, expiry, delete_code, premium)
                  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)""",
